@@ -38,7 +38,7 @@ region_counts = df["region"].value_counts().head(5)
 for region, count in region_counts.items():
     print(f"  {region:15s} : {count:3d} patients")
 
-# ===== TEMPERATURE MOYENNE PAR DIAGNOSTIC =====
+# ===== TEMPERATURE MOYENNE PAR DIAGNOSTIC =====j
 print(f"\n--- Temperature moyenne par diagnostic ---")
 temp_by_diag = df.groupby("diagnostic")["temperature"].mean()
 for diag, temp in temp_by_diag.items():
