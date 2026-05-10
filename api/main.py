@@ -138,4 +138,14 @@ def predict(patient: PatientInput):
         message=messages.get(diagnostic, "Consultez un medecin.")
     )
 
+from fastapi.middleware.cors import CORSMiddleware
+
+# Autoriser les requetes depuis le frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # En dev : tout accepter
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
