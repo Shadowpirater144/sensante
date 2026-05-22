@@ -20,6 +20,7 @@ if groq_api_key:
 else:
     print("ATTENTION : GROQ_API_KEY non trouvee. /explain sera desactive.")
 
+
 # --- Schemas Pydantic ---
 class PatientInput(BaseModel):
     age: int = Field(..., ge=0, le=120)
@@ -135,15 +136,18 @@ def predict(patient: PatientInput):
     )
 
 # --- System prompt medical ---
-SYSTEM_PROMPT = """Tu es un assistant medical senegalais.
-Tu recois un diagnostic et des donnees patient.
-Explique le resultat en francais simple,
-comme un medecin parlerait a son patient.
-Sois rassurant mais recommande toujours
-une consultation medicale.
+# ========== EXERCICE 1 : prompt en wolof ==========
+SYSTEM_PROMPT = """Tu es un assistant médical sénégalais.
+Tu reçois un diagnostic et des données patient.
+Explique le résultat en mélange de français et de mots wolof simples,
+comme un agent de santé parlerait à un patient au Sénégal.
+Utilise des mots wolof courants : yaram (corps), dafa tane (il est malade),
+dem faj (aller se soigner), ndox (eau), set (propre).
+Sois rassurant mais recommande toujours une consultation médicale.
 Maximum 3 phrases.
-Ne fais JAMAIS de diagnostic toi-meme.
+Ne fais JAMAIS de diagnostic toi-même.
 Tu expliques uniquement le diagnostic fourni."""
+# ========== FIN EXERCICE 1 ==========
 
 @app.post("/explain", response_model=ExplainOutput)
 def explain(data: ExplainInput):
@@ -177,3 +181,14 @@ def explain(data: ExplainInput):
         explication = f"Erreur lors de l'appel au LLM : {str(e)}"
 
     return ExplainOutput(explication=explication)
+
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
+# Servir le frontend comme fichier statique
+app.mount("/static", StaticFiles(directory="frontend"), name="static")
+
+@app.get("/")
+def serve_frontend():
+    """Servir la page d'accueil."""
+    return FileResponse("frontend/index.html")

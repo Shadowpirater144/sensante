@@ -288,7 +288,9 @@
   <!-- JavaScript -->
   <script>
     // URL de l'API (à changer si l'API est ailleurs)
-const API_URL = "http://localhost:5000";
+/*const API_URL = "http://localhost:5000";*/
+//LAB6:IA
+const API_URL = "";
 
 const historique = [];
 
@@ -404,8 +406,7 @@ async function diagnostiquer() {
 }
 
 function afficherResultat(r) {
-// NOUVEAU : appeler automatiquement /explain
-    demanderExplication(r);
+  // demanderExplication sera appelé APRES le innerHTML (voir fin de fonction)
 
   // Codes couleur par diagnostic
   const couleurs = {
@@ -531,6 +532,22 @@ historique.unshift({
 });
 if (historique.length > 5) historique.pop();
 afficherHistorique();
+
+// ========== LAB 5 : appel /explain APRES que le HTML est dans la page ==========
+demanderExplication(r);
+// ========== FIN LAB 5 ==========
+
+// ========== EXERCICE 3 : bloquer le bouton pour forcer la lecture ==========
+const btn = document.getElementById("btn-diag");
+btn.disabled = true;
+btn.textContent = "Lisez le résultat...";
+btn.classList.add("opacity-50", "cursor-not-allowed");
+setTimeout(() => {
+    btn.disabled = false;
+    btn.textContent = "Diagnostiquer";
+    btn.classList.remove("opacity-50", "cursor-not-allowed");
+}, 3000);
+// ========== FIN EXERCICE 3 ==========
 }
 async function demanderExplication(diagnostic_data) {
     // Recuperer les donnees du formulaire
@@ -569,6 +586,11 @@ async function demanderExplication(diagnostic_data) {
                 <div class="mt-4 bg-purple-50 rounded-lg p-4 border border-purple-200">
                     <p class="text-sm text-purple-600 font-medium mb-2">Explication (Llama 3)</p>
                     <p class="text-gray-700 text-sm leading-relaxed">${result.explication}</p>
+                    <!-- EXERCICE 3 : avertissement éthique -->
+                    <p class="text-xs text-red-500 mt-3 font-medium border-t border-purple-200 pt-2">
+                        ⚠️ Ce pré-diagnostic ne remplace pas une consultation médicale. Consultez un agent de santé.
+                    </p>
+                    <!-- FIN EXERCICE 3 -->
                 </div>`;
         }
     } catch (error) {
