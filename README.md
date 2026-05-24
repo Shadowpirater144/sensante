@@ -25,4 +25,4 @@ https://Shadowpirater-sensante.hf.space
 
 ## Auteur
 
-EL Hadji Mamadou Thiam - L2 GLSI - ESP/UCAD - 2026
+EL Hadji Mamadou Thiam - L2 GLSIA - ESP/UCAD - 2026

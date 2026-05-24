@@ -80,3 +80,27 @@ Explique ce resultat au patient.
 # Afficher la reponse
 print("=== Explication SenSante ===")
 print(response2.choices[0].message.content)
+
+
+# ========== EXERCICE 2 : test des temperatures ==========
+print("\n=== Test des temperatures ===\n")
+
+for temp_value in [0.0, 0.5, 1.0]:
+    resp = groq_client.chat.completions.create(
+        model="llama-3.1-8b-instant",
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT}, # type: ignore
+            {"role": "user", "content": (
+                "Patient : Homme, 35 ans, region Kaolack\n"
+                "Temperature : 38.9 C\n"
+                "Diagnostic du modele : grippe (probabilite 65%)\n"
+                "Explique ce resultat au patient."
+            )}
+        ],
+        max_tokens=200,
+        temperature=temp_value
+    )
+    print(f"--- temperature={temp_value} ---")
+    print(resp.choices[0].message.content)
+    print()
+# ========== FIN EXERCICE 2 ==========
